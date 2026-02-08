@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+.Python
+venv/
+env/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# Testing
+.pytest_cache/
+
+# Documentation
+README.md
+ARCHITECTURE.md
+*.md
+
+# Environment
+.env
+.env.*
+
+# Generated files
+app/cache/
+app/static/generated/
+
+# Logs
+*.log

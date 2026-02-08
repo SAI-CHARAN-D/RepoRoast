@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RepoRoast • Igniting Architecture</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="bg-black text-gray-300 font-sans selection:bg-[#238636] selection:text-white overflow-x-hidden relative"
+    onmousemove="document.documentElement.style.setProperty('--mouse-x', event.clientX + 'px'); document.documentElement.style.setProperty('--mouse-y', event.clientY + 'px');">
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0d1117]/80 backdrop-blur-xl border-b border-[#30363d]">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-8 h-8 bg-gradient-to-br from-[#238636] to-[#2ea043] rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <span class="text-white font-bold text-lg">RepoRoast</span>
+            </div>
+
+            <!-- Nav Links -->
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#features" class="text-gray-400 hover:text-white transition text-sm font-medium">Features</a>
+                <a href="#how-it-works" class="text-gray-400 hover:text-white transition text-sm font-medium">How It
+                    Works</a>
+                <a href="#examples" class="text-gray-400 hover:text-white transition text-sm font-medium">Examples</a>
+            </div>
+
+            <!-- CTA Button -->
+            <a href="https://github.com/yourusername/reporoast" target="_blank"
+                class="flex items-center gap-2 px-4 py-2 bg-[#238636] hover:bg-[#2ea043] text-white rounded-lg transition font-medium text-sm">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                </svg>
+                Star on GitHub
+            </a>
+        </div>
+    </nav>
+
+    <!-- Design Elements -->
+    <div class="fixed inset-0 bg-grid opacity-20 z-0 pointer-events-none"></div>
+    <div class="spotlight"></div>
+
+    <div
+        class="relative z-10 max-w-6xl mx-auto px-6 pt-32 pb-24 min-h-screen flex flex-col items-center justify-center">
+
+        <!-- Hero Section -->
+        <header class="text-center mb-20 max-w-4xl animate-fade-in-up">
+            <div
+                class="inline-block px-3 py-1 mb-6 text-xs font-mono font-medium text-[#2ea043] bg-[#2ea043]/10 rounded-full border border-[#2ea043]/20">
+                AUDIO-FIRST ARCHITECTURE LEARNING
+            </div>
+            <h1
+                class="text-7xl md:text-9xl font-bold text-white mb-8 tracking-tighter leading-[0.9] text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50">
+                RepoRoast
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-400 font-light leading-relaxed max-w-2xl mx-auto">
+                Turn GitHub repositories into <span class="text-white font-medium">roast-style podcasts</span>. <br>
+                <span class="text-gray-500">Architecture explained through conversation, not chat.</span>
+            </p>
+        </header>
+
+        <!-- CLI / Input Section -->
+        <div class="w-full max-w-2xl relative group mb-32 z-20">
+            <!-- Glow Effect -->
+            <div
+                class="absolute -inset-0.5 bg-gradient-to-r from-[#238636] to-[#2ea043] rounded-lg opacity-20 group-hover:opacity-50 blur transition duration-500">
+            </div>
+
+            <div
+                class="relative bg-[#0d1117] rounded-lg border border-[#30363d] p-2 input-glow transition-all shadow-2xl">
+                <form id="repo-form" class="flex flex-col md:flex-row gap-0" onsubmit="handleIgnite(event)">
+                    <div class="flex-1 flex items-center px-4 bg-[#0d1117] rounded-l">
+                        <span class="text-gray-600 mr-3 font-mono text-lg">~/</span>
+                        <input type="text" id="repo_url" name="repo_url"
+                            class="w-full bg-transparent border-none text-white focus:ring-0 placeholder-gray-700 font-mono text-base py-4"
+                            placeholder="github.com/username/spaghetti-code" required autocomplete="off">
+                    </div>
+                    <button type="submit"
+                        class="bg-white text-black hover:bg-gray-200 font-bold py-3 px-8 rounded transition-all duration-200 flex items-center justify-center gap-2 m-1">
+                        ROAST IT
+                        <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Terminal Loading Modal (Full Screen) -->
+        <div id="loading-overlay"
+            class="hidden fixed inset-0 z-[100] bg-black/90 backdrop-blur-lg flex items-center justify-center p-6">
+            <div class="w-full max-w-2xl">
+                <!-- Terminal Window -->
+                <div class="bg-[#0d1117] border border-[#30363d] rounded-lg shadow-2xl overflow-hidden">
+                    <!-- Terminal Header -->
+                    <div class="flex items-center justify-between px-4 py-3 bg-[#161b22] border-b border-[#30363d]">
+                        <div class="flex gap-2">
+                            <div class="w-3 h-3 rounded-full bg-[#f85149]"></div>
+                            <div class="w-3 h-3 rounded-full bg-[#d29922]"></div>
+                            <div class="w-3 h-3 rounded-full bg-[#2ea043]"></div>
+                        </div>
+                        <span
+                            class="text-[11px] text-gray-500 font-mono uppercase tracking-wider">roast_protocol.sh</span>
+                        <div class="w-16"></div> <!-- Spacer for centering -->
+                    </div>
+
+                    <!-- Terminal Body -->
+                    <div class="p-6">
+                        <div id="terminal-log"
+                            class="font-mono text-sm space-y-2 min-h-[250px] max-h-[400px] overflow-y-auto text-[#2ea043] custom-scroll">
+                            <!-- Logs injected here -->
+                        </div>
+
+                        <!-- Loading Spinner -->
+                        <div class="flex items-center justify-center gap-3 mt-6 pt-6 border-t border-[#30363d]">
+                            <div
+                                class="animate-spin rounded-full h-4 w-4 border-2 border-[#2ea043] border-t-transparent">
+                            </div>
+                            <span class="text-gray-500 text-sm font-mono">Analyzing repository...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Minimal Feature Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 w-full max-w-5xl border-t border-white/5 pt-20">
+            <!-- Feature 1 -->
+            <div class="space-y-4">
+                <div class="text-[#2ea043] font-mono text-xs mb-2">01 — PODCAST</div>
+                <h3 class="text-lg font-bold text-white">Listen First, Read Later</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">
+                    Two AI voices walk through your codebase like senior engineers do: one roasts questionable
+                    decisions, the other explains the real architecture and trade-offs.
+                </p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="space-y-4">
+                <div class="text-[#2ea043] font-mono text-xs mb-2">02 — DIAGRAM</div>
+                <h3 class="text-lg font-bold text-white">Visual Proof</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">
+                    Auto-generated architecture diagram showing entry points, module relationships, and data flow. The
+                    podcast explicitly references this diagram.
+                </p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="space-y-4">
+                <div class="text-[#2ea043] font-mono text-xs mb-2">03 — GUIDE</div>
+                <h3 class="text-lg font-bold text-white">Guided Learning Path</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">
+                    Senior-grade developer guide showing what to read first, what to skip initially, key files, and
+                    known risks. Real onboarding artifact.
+                </p>
+            </div>
+        </div>
+
+        <!-- How It Works Section -->
+        <div id="how-it-works" class="w-full max-w-5xl mt-40 border-t border-white/5 pt-20">
+            <div class="text-center mb-16">
+                <div class="text-[#2ea043] font-mono text-xs mb-4 uppercase tracking-wider">The Process</div>
+                <h2 class="text-4xl font-bold text-white mb-4">How It Works</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">
+                    From GitHub URL to architectural understanding in 60 seconds
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Step 1 -->
+                <div class="text-center">
+                    <div
+                        class="w-12 h-12 mx-auto mb-4 rounded-full bg-[#2ea043]/10 border border-[#2ea043]/20 flex items-center justify-center">
+                        <span class="text-[#2ea043] font-bold">1</span>
+                    </div>
+                    <h4 class="text-white font-semibold mb-2">Clone + Analyze</h4>
+                    <p class="text-sm text-gray-500">We read your entire repository structure and build a complete
+                        understanding</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="text-center">
+                    <div
+                        class="w-12 h-12 mx-auto mb-4 rounded-full bg-[#2ea043]/10 border border-[#2ea043]/20 flex items-center justify-center">
+                        <span class="text-[#2ea043] font-bold">2</span>
+                    </div>
+                    <h4 class="text-white font-semibold mb-2">Generate Insights</h4>
+                    <p class="text-sm text-gray-500">AI creates the podcast dialogue, architecture diagram, and
+                        developer guide</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="text-center">
+                    <div
+                        class="w-12 h-12 mx-auto mb-4 rounded-full bg-[#2ea043]/10 border border-[#2ea043]/20 flex items-center justify-center">
+                        <span class="text-[#2ea043] font-bold">3</span>
+                    </div>
+                    <h4 class="text-white font-semibold mb-2">Synthesize Audio</h4>
+                    <p class="text-sm text-gray-500">Convert dialogue to natural-sounding speech with male and female
+                        voices</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="text-center">
+                    <div
+                        class="w-12 h-12 mx-auto mb-4 rounded-full bg-[#2ea043]/10 border border-[#2ea043]/20 flex items-center justify-center">
+                        <span class="text-[#2ea043] font-bold">4</span>
+                    </div>
+                    <h4 class="text-white font-semibold mb-2">Listen & Learn</h4>
+                    <p class="text-sm text-gray-500">Experience the codebase through conversation, then dive into
+                        specifics</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Why Section -->
+        <div id="features" class="w-full max-w-5xl mt-40 border-t border-white/5 pt-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                <div>
+                    <div class="text-[#2ea043] font-mono text-xs mb-4 uppercase tracking-wider">The Problem</div>
+                    <h2 class="text-3xl font-bold text-white mb-6">Junior devs waste days just figuring out where to
+                        start</h2>
+                    <p class="text-gray-400 leading-relaxed mb-4">
+                        You join a new team. They point you to a 50,000-line repo. "Go ahead and familiarize yourself,"
+                        they say.
+                    </p>
+                    <p class="text-gray-400 leading-relaxed mb-4">
+                        You spend days clicking through files, reading imports, trying to build a mental model. Which
+                        file is the entry point? What talks to what? Where's the actual business logic?
+                    </p>
+                    <p class="text-gray-400 leading-relaxed">
+                        By the time you understand the architecture, you've already forgotten why you needed to know it.
+                    </p>
+                </div>
+
+                <div>
+                    <div class="text-[#2ea043] font-mono text-xs mb-4 uppercase tracking-wider">The Solution</div>
+                    <h2 class="text-3xl font-bold text-white mb-6">Listen first, read later</h2>
+                    <p class="text-gray-400 leading-relaxed mb-4">
+                        RepoRoast lets you understand architecture through conversation—the way senior engineers already
+                        learn systems.
+                    </p>
+                    <p class="text-gray-400 leading-relaxed">
+                        Spend 60 seconds listening, then know exactly what to read and why.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <footer
+            class="mt-40 text-gray-800 text-[10px] font-mono tracking-widest uppercase border-t border-white/5 pt-8">
+            Architecture explained through conversation
+        </footer>
+
+    </div>
+
+
+    <script>
+        // Matrix Rain / Fire Logic removed for cleaner aesthetic
+
+        async function handleIgnite(e) {
+            e.preventDefault();
+            const form = document.getElementById('repo-form');
+            const urlInput = document.getElementById('repo_url');
+            const overlay = document.getElementById('loading-overlay');
+            const logContainer = document.getElementById('terminal-log');
+
+            if (!urlInput.value) return;
+
+            // Show Overlay
+            overlay.classList.remove('hidden');
+
+            // Start Log Animation
+            const logs = [
+                "Initialising roast sequence...",
+                "Cloning repo (hoping it compiles)...",
+                "Detecting 500-line useEffect hooks...",
+                "Found sensitive keys committed to main...",
+                "Analyzing indentation inconsistencies...",
+                "Judging your commit messages...",
+                "Identifying 'temporary' fixes from 3 years ago...",
+                "Synthesizing disappointment...",
+                "Compiling list of architectural sins...",
+                "Preparing emotional damage report..."
+            ];
+
+            let i = 0;
+            const interval = setInterval(() => {
+                const line = document.createElement('div');
+                line.className = "flex items-start";
+                line.innerHTML = `
+                    <span class="text-gray-600 mr-2 font-mono text-[10px] w-14 shrink-0">${new Date().toLocaleTimeString('en-US', { hour12: false })}</span> 
+                    <span>${logs[i % logs.length]}</span>
+                `;
+                logContainer.appendChild(line);
+                logContainer.scrollTop = logContainer.scrollHeight;
+                i++;
+            }, 600);
+
+            try {
+                const response = await fetch('/ignite', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ repo_url: urlInput.value })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    // Handle Errors
+                    clearInterval(interval);
+                    logContainer.innerHTML += `<div class="text-red-500 mt-2">ERROR: ${data.error || 'Connection Failed'}</div>`;
+                }
+            } catch (err) {
+                clearInterval(interval);
+                logContainer.innerHTML += `<div class="text-red-500 mt-2">FATAL ERROR: ${err.message}</div>`;
+            }
+        }
+    </script>
+</body>
+
+</html>
