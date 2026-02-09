@@ -163,16 +163,14 @@ MIT License - See LICENSE file for details
 
 ---
 
-## 🏆 Built For
-
-**Google AI Hackathon** - Firebase Track  
+ 
 Demonstrating audio-first architecture learning with Google Gemini & Cloud TTS
 
 ---
 
 ## 🔗 Live Demo
 
-[Add your deployed URL here]
+[(https://reporoast-785760524853.us-central1.run.app/)]
 
 ---
 
