@@ -43,6 +43,9 @@
                     {% endif %}
                 </div>
                 <span class="px-2 py-0.5 rounded-full border border-[#30363d] text-[10px] text-[#8b949e]">Public</span>
+                <span
+                    class="ml-2 px-2 py-0.5 rounded-full border border-yellow-500/20 text-[10px] text-yellow-500/80 hidden md:inline-block">⚡
+                    Live AI Analysis</span>
             </a>
         </div>
 
@@ -124,6 +127,9 @@
             <div class="text-[#f85149] text-sm">Audio generation failed.</div>
             {% endif %}
         </div>
+        <div class="absolute bottom-2 text-[10px] text-[#8b949e]/50 font-mono">
+            * Voices and analysis are generated in real-time and are not pre-recorded.
+        </div>
     </section>
 
     <!-- MAIN BODY (Scrollable Area) -->
@@ -140,6 +146,8 @@
                         class="bg-[#f6f8fa] px-4 py-3 border-b border-[#d0d7de] flex justify-between items-center shrink-0">
                         <h3 class="font-semibold text-sm text-[#24292f] flex items-center gap-2">
                             <span class="text-[#a371f7]">☊</span> Architecture Map
+                            <span class="text-[10px] font-normal text-gray-500 hidden sm:inline-block"
+                                title="AI-generated diagrams may contain syntax errors">(Experimental)</span>
                         </h3>
                         <div class="flex items-center gap-2">
                             <div class="flex bg-white border border-[#d0d7de] rounded-md overflow-hidden shadow-sm">
@@ -158,6 +166,10 @@
                                 </svg>
                             </button>
                         </div>
+                    </div>
+                    <div
+                        class="px-4 py-1 bg-yellow-50 border-b border-[#d0d7de] text-[10px] text-yellow-800 flex items-center justify-center gap-2">
+                        <span>⚠️ Mermaid diagrams may sometimes contain syntax errors.</span>
                     </div>
                     <div id="mermaid-wrapper"
                         class="flex-1 overflow-hidden relative bg-white cursor-grab active:cursor-grabbing">
