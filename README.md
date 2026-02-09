@@ -4,7 +4,7 @@
 
 RepoRoast analyzes any public GitHub repository and generates a natural-sounding podcast where two AI voices discuss the codebase—one roasts the architecture, the other explains the trade-offs. Think *senior engineers reviewing code over coffee*, delivered as audio.
 
-Built for **Google AI Hackathon** (Firebase Track).
+Built for **Google Gemini Hackathon** .
 
 ---
 
