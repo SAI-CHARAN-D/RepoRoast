@@ -1,9 +1,8 @@
 
+
 import os
 import json
 import tempfile
-from google.cloud import texttospeech
-from google.oauth2 import service_account
 from app.services.guardrail_service import ensure_cache_dir
 
 # Ensure generated directory exists for frontend serving
@@ -17,61 +16,73 @@ class TTSService:
     def __init__(self):
         self.use_google_cloud = False
         self.client = None
-        
-        # Try to load Google Cloud TTS credentials
+        self.credentials = None
+        self.voice_roaster = None
+        self.voice_explainer = None
+        self.audio_config = None
+        self._initialized = False
+
+    def _initialize_client(self):
+        """Lazy load Google Cloud TTS client"""
+        if self._initialized:
+            return
+
+        from google.cloud import texttospeech
+        from google.oauth2 import service_account
+
         try:
-            credentials = None
-            
             # Option 1: Load from GOOGLE_CLOUD_TTS_JSON env variable (JSON content)
             tts_json = os.getenv('GOOGLE_CLOUD_TTS_JSON')
-            print(f"TTS DEBUG: GOOGLE_CLOUD_TTS_JSON found: {bool(tts_json and tts_json.strip())}")
             
             if tts_json and tts_json.strip():
                 try:
                     credentials_info = json.loads(tts_json)
-                    credentials = service_account.Credentials.from_service_account_info(credentials_info)
+                    self.credentials = service_account.Credentials.from_service_account_info(credentials_info)
                     print("✅ TTS: Loaded credentials from GOOGLE_CLOUD_TTS_JSON")
                 except json.JSONDecodeError as je:
                     print(f"❌ TTS: GOOGLE_CLOUD_TTS_JSON is not valid JSON: {je}")
             
             # Option 2: Load from GOOGLE_APPLICATION_CREDENTIALS env variable (file path)
-            if not credentials:
+            if not self.credentials:
                 creds_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
-                print(f"TTS DEBUG: GOOGLE_APPLICATION_CREDENTIALS found: {bool(creds_path)}")
                 if creds_path and os.path.exists(creds_path):
-                    credentials = service_account.Credentials.from_service_account_file(creds_path)
+                    self.credentials = service_account.Credentials.from_service_account_file(creds_path)
                     print(f"✅ TTS: Loaded credentials from {creds_path}")
             
             # Initialize client with credentials
-            if credentials:
-                self.client = texttospeech.TextToSpeechClient(credentials=credentials)
+            if self.credentials:
+                self.client = texttospeech.TextToSpeechClient(credentials=self.credentials)
                 print("✅ TTS: TextToSpeechClient initialized with credentials")
             else:
-                # Try default credentials (for Google Cloud environments)
-                print("TTS DEBUG: Trying default credentials...")
-                self.client = texttospeech.TextToSpeechClient()
-            
-            self.use_google_cloud = True
-            print("🎉 TTS: Google Cloud Client initialized successfully.")
+                try:
+                    # Try default credentials (for Google Cloud environments)
+                    self.client = texttospeech.TextToSpeechClient()
+                    print("TTS DEBUG: Using default credentials")
+                except Exception:
+                     # If even default fails, we can't use Cloud TTS
+                     pass
+
+            if self.client:
+                self.use_google_cloud = True
+                
+                # Voice Configuration (Cloud)
+                self.voice_roaster = texttospeech.VoiceSelectionParams(
+                    language_code="en-US", name="en-US-Studio-M"
+                )
+                self.voice_explainer = texttospeech.VoiceSelectionParams(
+                    language_code="en-US", name="en-US-Studio-O" 
+                )
+                self.audio_config = texttospeech.AudioConfig(
+                    audio_encoding=texttospeech.AudioEncoding.MP3,
+                    speaking_rate=1.1
+                )
+                print("🎉 TTS: Google Cloud Client initialized successfully.")
             
         except Exception as e:
-            print(f"❌ TTS: Google Cloud credentials not found ({e}). Falling back to gTTS.")
+            print(f"❌ TTS: Initialization failed ({e}). Falling back to gTTS.")
             self.use_google_cloud = False
-
-        if self.use_google_cloud:
-            # Voice Configuration (Cloud)
-            # Roaster = Male (Studio-M: Confident, assertive male voice)
-            self.voice_roaster = texttospeech.VoiceSelectionParams(
-                language_code="en-US", name="en-US-Studio-M"
-            )
-            # Explainer = Female (Studio-O: Clear, professional female voice)
-            self.voice_explainer = texttospeech.VoiceSelectionParams(
-                language_code="en-US", name="en-US-Studio-O" 
-            )
-            self.audio_config = texttospeech.AudioConfig(
-                audio_encoding=texttospeech.AudioEncoding.MP3,
-                speaking_rate=1.1
-            )
+            
+        self._initialized = True
 
     def format_text_to_ssml(self, text, speaker):
         """
@@ -93,6 +104,11 @@ class TTSService:
 
     def synthesize_turn_cloud(self, text, speaker):
         """Synthesizes using Google Cloud TTS with SSML."""
+        self._initialize_client()
+        if not self.client: return None
+
+        from google.cloud import texttospeech # Lazy import
+
         voice = self.voice_roaster if speaker in ["Host", "Roaster"] else self.voice_explainer
         
         # Format text as SSML
@@ -133,9 +149,13 @@ class TTSService:
         Generates a silent audio segment using SSML break.
         Duration in milliseconds.
         """
-        if not self.use_google_cloud:
+        self._initialize_client()
+
+        if not self.use_google_cloud or not self.client:
             return b""  # gTTS doesn't support SSML breaks easily
         
+        from google.cloud import texttospeech # Lazy import
+
         ssml = f'<speak><break time="{duration_ms}ms"/></speak>'
         synthesis_input = texttospeech.SynthesisInput(ssml=ssml)
         
@@ -158,6 +178,10 @@ class TTSService:
             return None
             
         ensure_generated_dir()
+        
+        # Initialize client to determine if we can use Cloud TTS
+        self._initialize_client()
+        
         output_filename = f"roast_{unique_id}.mp3"
         output_path = os.path.join(GENERATED_DIR, output_filename)
         

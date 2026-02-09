@@ -1,20 +1,28 @@
 
+
 import os
 import json
-import google.generativeai as genai
 from app.services.ai_prompts import SYSTEM_PROMPT, generate_user_prompt
 
 class AIService:
     def __init__(self):
-        api_key = os.environ.get("GOOGLE_API_KEY")
-        if not api_key:
-            # We will handle missing key gracefully later, maybe mock for dev
+        self.model = None
+        self.api_key = os.environ.get("GOOGLE_API_KEY")
+        
+    def _get_model(self):
+        """Lazy load the model to save memory on startup"""
+        if self.model:
+            return self.model
+            
+        if not self.api_key:
             print("WARNING: GOOGLE_API_KEY not found in environment variables.")
-            self.model = None
-        else:
-            genai.configure(api_key=api_key)
-            # User confirmed Gemini 3 Pro Preview
-            self.model = genai.GenerativeModel('gemini-3-pro-preview')
+            return None
+            
+        import google.generativeai as genai
+        genai.configure(api_key=self.api_key)
+        # User confirmed Gemini 3 Pro Preview
+        self.model = genai.GenerativeModel('gemini-3-pro-preview')
+        return self.model
 
     def sanitize_dialogue(self, dialogue_list):
         """
@@ -42,7 +50,8 @@ class AIService:
         """
         Sends the blueprint to Gemini and returns the structured analysis.
         """
-        if not self.model:
+        # Ensure model is verified/loaded
+        if not self._get_model():
             return {
                 "error": "API Key Missing",
                 "roast_dialogue": [{"speaker": "System", "text": "Please configure GOOGLE_API_KEY."}],

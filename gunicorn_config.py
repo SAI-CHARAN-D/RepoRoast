@@ -11,7 +11,8 @@ backlog = 2048
 
 # Worker processes
 workers = multiprocessing.cpu_count() * 2 + 1
-worker_class = 'gevent'  # Async worker for better concurrency
+worker_class = 'gthread'  # Threaded worker for stability
+threads = 4  # Number of threads per worker
 worker_connections = 1000
 timeout = 120  # Increased for long-running AI requests
 keepalive = 5
